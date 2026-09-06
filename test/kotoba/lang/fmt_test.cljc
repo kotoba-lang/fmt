@@ -1,6 +1,7 @@
 (ns kotoba.lang.fmt-test
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [clojure.test :refer [deftest is]]
             [clojure.string :as str]
+            [clojure.edn :as edn]
             [kotoba.lang.fmt :as fmt]))
 
 (deftest format-scalar-and-small-collections
@@ -35,3 +36,55 @@
 
 (deftest format-rejects-bad-edn
   (is (thrown? #?(:clj Throwable :cljs :default) (fmt/format "{:a"))))
+
+;; -- pprint / pprint-str ----------------------------------------------------
+
+(deftest pprint-str-flat-map
+  (is (= "{:a 1, :b 2}" (fmt/pprint-str {:a 1 :b 2}))))
+
+(deftest pprint-str-nested-map-with-vectors
+  (is (= "{:a [1 2 3], :b {:c [4 5]}}"
+         (fmt/pprint-str {:a [1 2 3] :b {:c [4 5]}}))))
+
+(deftest pprint-str-set
+  ;; sets have no defined iteration order in Clojure/CLJS, so assert on
+  ;; content rather than exact string.
+  (let [out (fmt/pprint-str #{1 2 3})]
+    (is (str/starts-with? out "#{"))
+    (is (str/ends-with? out "}"))
+    (doseq [n [1 2 3]] (is (str/includes? out (str n))))))
+
+(deftest pprint-str-deeply-nested-structure
+  (let [data {:a {:b {:c {:d {:e [1 2 3]}}}}}
+        out (fmt/pprint-str data)]
+    (is (= data (edn/read-string out)))
+    ;; force line-wrapping at a narrow margin and check the result still
+    ;; reads back to the same value
+    (let [wrapped (fmt/pprint-str data {:margin 10})]
+      (is (str/includes? wrapped "\n"))
+      (is (= data (edn/read-string wrapped))))))
+
+(deftest pprint-str-empty-collections
+  (is (= "{}" (fmt/pprint-str {})))
+  (is (= "[]" (fmt/pprint-str [])))
+  (is (= "#{}" (fmt/pprint-str #{})))
+  (is (= "()" (fmt/pprint-str (list)))))
+
+(deftest pprint-str-string-with-special-characters
+  (let [s "line1\nline2\t\"quoted\"\\backslash"
+        out (fmt/pprint-str s)]
+    (is (= s (edn/read-string out)))
+    (is (= (str "{:k " (pr-str s) "}") (fmt/pprint-str {:k s})))))
+
+(deftest pprint-str-same-engine-as-format-str
+  (doseq [data [{:a 1 :b [2 3]} #{1 2 3} {:nested {:deep [1 2 3]}} [] "hi\n\"there\""]]
+    (is (= (fmt/format-str data) (fmt/pprint-str data)))
+    (is (= (fmt/format-str data {:margin 5}) (fmt/pprint-str data {:margin 5})))))
+
+(deftest pprint-prints-with-trailing-newline
+  #?(:clj
+     (is (= (str (fmt/pprint-str {:a 1}) "\n")
+            (with-out-str (fmt/pprint {:a 1}))))
+     :cljs
+     (is (= (str (fmt/pprint-str {:a 1}) "\n")
+            (with-out-str (fmt/pprint {:a 1}))))))

@@ -5,6 +5,10 @@
   read is order-preserving); key sorting is a separate content-addressing
   concern (see dag-cbor).
 
+  Also exposes `pprint` / `pprint-str`, the `clojure.pprint`-shaped entry
+  points for the SAME emit engine, aimed at human-facing value inspection
+  rather than source-text canonicalization. See README.
+
   Zero third-party runtime deps; .cljc (JVM / SCI / CLJS / GraalVM / kotoba-WASM)."
   (:require [clojure.edn :as edn]
             [clojure.string :as str])
@@ -93,3 +97,30 @@
   ([s opts]
    (let [data (edn/read-string {:default (fn [_t v] v)} s)]
      (format-str data opts))))
+
+;; -- pprint / pprint-str ----------------------------------------------------
+;;
+;; `format-str` already *is* a value pretty-printer: it takes in-memory
+;; Clojure/EDN data (not source text) and emits an indented, margin-wrapped
+;; string via the same recursive `emit` used above -- there is no second
+;; engine here, no parallel implementation to drift out of sync. `pprint-str`
+;; and `pprint` expose that engine under the names a caller reaches for when
+;; the job is "print this value so a human can read it" (clojure.pprint's
+;; job) rather than "canonicalize this source text" (`format`'s job). See the
+;; README's "pprint / pprint-str" section for exactly what subset of
+;; `clojure.pprint` this covers and what it deliberately does not attempt.
+
+(defn pprint-str
+  "Pretty-print `x` (an EDN value: map/vector/set/seq/scalar) to a
+  human-readable indented string. Same engine as `format-str` -- this exists
+  so callers who want `(with-out-str (pprint x))` from `clojure.pprint` can
+  call a string-returning function directly instead. Options: `:indent`
+  (default 2), `:margin` (default 80)."
+  ([x] (format-str x default-opts))
+  ([x opts] (format-str x opts)))
+
+(defn pprint
+  "Pretty-print `x` to stdout, followed by a newline. See `pprint-str` for the
+  string-returning form and options."
+  ([x] (pprint x default-opts))
+  ([x opts] (println (pprint-str x opts))))
