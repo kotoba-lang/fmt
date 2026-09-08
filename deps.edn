@@ -4,6 +4,11 @@
  ;; A deterministic EDN formatter (whitespace/indentation normalization), pure.
  ;; No third-party deps; .cljc. See ADR-kotoba-lang-foundational-stdlib.md.
  :deps {
+        ;; kotoba.lang.edn, not clojure.edn. Pinned as an explicit floor:
+        ;; tools.deps takes the NEWEST sha it is shown, so without a floor here
+        ;; this repo silently rides whatever a sibling happens to name.
+        io.github.kotoba-lang/edn {:git/sha "b8a2a05876638442270956334e1e0d6328531b1b"}
+       
         ;; kotoba.lang.text, not clojure.string. Pinned as an explicit floor:
         ;; tools.deps takes the NEWEST sha it is shown, so without a floor here
         ;; this repo silently rides whatever a sibling happens to name.

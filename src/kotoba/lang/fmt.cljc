@@ -10,7 +10,7 @@
   rather than source-text canonicalization. See README.
 
   Zero third-party runtime deps; .cljc (JVM / SCI / CLJS / GraalVM / kotoba-WASM)."
-  (:require [clojure.edn :as edn]
+  (:require [kotoba.lang.edn :as edn]
             [kotoba.lang.text :as str])
   (:refer-clojure :exclude [read format]))
 
