@@ -11,7 +11,7 @@
 
   Zero third-party runtime deps; .cljc (JVM / SCI / CLJS / GraalVM / kotoba-WASM)."
   (:require [clojure.edn :as edn]
-            [clojure.string :as str])
+            [kotoba.lang.text :as str])
   (:refer-clojure :exclude [read format]))
 
 (def ^:private default-opts {:indent 2 :margin 80})
