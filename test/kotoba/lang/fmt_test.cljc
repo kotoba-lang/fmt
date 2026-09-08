@@ -1,6 +1,6 @@
 (ns kotoba.lang.fmt-test
   (:require [clojure.test :refer [deftest is]]
-            [clojure.string :as str]
+            [kotoba.lang.text :as str]
             [clojure.edn :as edn]
             [kotoba.lang.fmt :as fmt]))
 
