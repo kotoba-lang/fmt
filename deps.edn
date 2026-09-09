@@ -4,6 +4,25 @@
  ;; A deterministic EDN formatter (whitespace/indentation normalization), pure.
  ;; No third-party deps; .cljc. See ADR-kotoba-lang-foundational-stdlib.md.
  :deps {
+        io.github.kotoba-lang/fmt-emit
+        {:git/url "https://github.com/kotoba-lang/fmt-emit.git"
+         :git/sha "114a4a06e62898c589c2907a60ac61c0cc8c4385"}
+        io.github.kotoba-lang/fmt-emit-inline
+        {:git/url "https://github.com/kotoba-lang/fmt-emit-inline.git"
+         :git/sha "71c9e741a89244ce27d327c46114234041e7c4ce"}
+        io.github.kotoba-lang/fmt-format
+        {:git/url "https://github.com/kotoba-lang/fmt-format.git"
+         :git/sha "54ecce51e5e53bc91e910474586b5c89d5799a2f"}
+        io.github.kotoba-lang/fmt-format-str
+        {:git/url "https://github.com/kotoba-lang/fmt-format-str.git"
+         :git/sha "b037a218f2a1cc95230e30e7800e3c17cac5f446"}
+        io.github.kotoba-lang/fmt-pprint
+        {:git/url "https://github.com/kotoba-lang/fmt-pprint.git"
+         :git/sha "722d602d63f765b669f07e20e73a09d2585cf4ad"}
+        io.github.kotoba-lang/fmt-pprint-str
+        {:git/url "https://github.com/kotoba-lang/fmt-pprint-str.git"
+         :git/sha "c6d409f2d12c68f220cf21a5cb8371db7f214584"}
+
         ;; kotoba.lang.edn, not clojure.edn. Pinned as an explicit floor:
         ;; tools.deps takes the NEWEST sha it is shown, so without a floor here
         ;; this repo silently rides whatever a sibling happens to name.
