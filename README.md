@@ -125,8 +125,8 @@ formatting function under the same name.
 ## Verify
 
 ```sh
-clojure -M:test                              # JVM
-nbb --classpath src:test:../text/src run-tests.cljk      # nbb / ClojureScript
+kbb -M:test                              # JVM
+kbb --backend sci --classpath src:test:../text/src run-tests.cljk      # nbb / ClojureScript
 ```
 
 Both run the **same** `.cljc` suite: `14 tests, 42 assertions, 0 failures`.
