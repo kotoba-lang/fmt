@@ -126,7 +126,7 @@ formatting function under the same name.
 
 ```sh
 clojure -M:test                              # JVM
-nbb --classpath src:test:../text/src run-tests.cljs      # nbb / ClojureScript
+nbb --classpath src:test:../text/src run-tests.cljk      # nbb / ClojureScript
 ```
 
 Both run the **same** `.cljc` suite: `14 tests, 42 assertions, 0 failures`.
