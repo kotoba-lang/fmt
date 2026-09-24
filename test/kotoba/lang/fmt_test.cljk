@@ -1,7 +1,7 @@
 (ns kotoba.lang.fmt-test
   (:require [kotoba.test :refer [deftest is]]
             [kotoba.lang.text :as str]
-            [clojure.edn :as edn]
+            [kotoba.lang.edn :as edn]
             [kotoba.lang.fmt :as fmt]))
 
 (deftest format-scalar-and-small-collections
